@@ -3,19 +3,20 @@ from database import SessionLocal, engine
 from models import Stock
 from sqlalchemy.orm import sessionmaker
 import json
+import os
 
-API_URI = "https://www.alphavantage.co/query"
-API_KEY = "UP550PGRTFSOGK1O"
+ALPHA_VANTAGE_URI = "https://www.alphavantage.co/query"
+ALPHA_VANTAGE_KEY = os.getenv("ALPHA_VANTAGE_KEY")
 
-def fetch_stock_data(symbol="AAPL"):
+def fetch_stock_data(symbol="TSLA"):
     params = {
         "function": "TIME_SERIES_INTRADAY",
         "symbol": symbol,
         "interval": "5min",
-        "apikey": API_KEY,
+        "apikey": ALPHA_VANTAGE_KEY,
     }
 
-    response = requests.get(API_URI, params= params)
+    response = requests.get(ALPHA_VANTAGE_URI, params= params)
 
     data = response.json()
 
@@ -34,4 +35,4 @@ def fetch_stock_data(symbol="AAPL"):
     print(f"Stored {symbol} data in DB")
 
 if __name__ == "__main__":
-    fetch_stock_data("AAPL")
+    fetch_stock_data()
